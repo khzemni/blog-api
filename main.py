@@ -36,6 +36,11 @@ client = MongoClient("localhost", 27017)
 blogapp_db = client["blogapp"]
 blogs_collection = blogapp_db.get_collection("blogs")
 
+
+@app.get("/")
+async def hello():
+    return {'message': "hello world"}
+
 @app.get("/blogs")
 async def getAllBlogs() -> dict:
     blogs = []
