@@ -1,12 +1,8 @@
-from wsgiref.util import request_uri
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from requests import request
-import socket
 
 origins = ["*"]
 
@@ -42,10 +38,9 @@ blogapp_db = client["blogapp"]
 blogs_collection = blogapp_db.get_collection("blogs")
 
 
-@app.get("/", response_class=RedirectResponse, status_code=307)
+@app.get("/")
 async def hello():
-    print("host is :"+socket.gethostname())
-    return "http://127.0.0.1:8000/docs"
+    return "deployed to horuku :D"
 
 @app.get("/blogs")
 async def getAllBlogs() -> dict:
