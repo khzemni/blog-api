@@ -1,8 +1,12 @@
-from fastapi import FastAPI
+from wsgiref.util import request_uri
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from requests import request
+import socket
 
 origins = ["*"]
 
@@ -32,14 +36,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = MongoClient("localhost", 27017)
+# client = MongoClient("localhost", 27017)
+client = MongoClient("mongodb+srv://khalilzemni:f1FTZxKPBi6JJJq7@blog-app.ss8fj.mongodb.net/?retryWrites=true&w=majority")
 blogapp_db = client["blogapp"]
 blogs_collection = blogapp_db.get_collection("blogs")
 
 
-@app.get("/")
+@app.get("/", response_class=RedirectResponse, status_code=307)
 async def hello():
-    return {'message': "hello world"}
+    print("host is :"+socket.gethostname())
+    return "http://127.0.0.1:8000/docs"
 
 @app.get("/blogs")
 async def getAllBlogs() -> dict:
